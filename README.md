@@ -29,3 +29,5 @@ The following requests should be implemented:
 - 12:29: Listen- und Taskoperationen funktionieren. Idee: minimale GUI. Eine andere hatte ich eben auch, aber schon wieder vergessen.
 
 - 12:35: Fehlende Funktionen: Tasks trennen, von Liste streichen. Auch Überlegung: Muss der komplette Task als related Task zurückgegeben werden oder reicht die ID? Genau das gleiche bei den Listen. Andererseits muss dann auch wieder ein Folgerequest kommen für den Rest der Tasks. Lassen wir es mal so.
+
+- 12:38: Zwischenfazit: Das läuft echt gut, ich sollte das mal in PHP umsetzen damit es auf Wald- und Wiesenhostern läuft, muss aber wegen HTTPS gucken.

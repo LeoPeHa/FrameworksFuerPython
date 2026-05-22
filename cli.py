@@ -5,8 +5,12 @@ import httpx
 
 DEFAULT_BASE_URL = "http://127.0.0.1:8000"
 
-def get_client(base_url):
-    return httpx.Client(base_url=base_url, timeout=10.0)
+def get_client(base_url, api_key):
+    return httpx.Client(
+        base_url=base_url, 
+        headers={"X-API-Key": api_key}, 
+        timeout=10.0
+    )
 
 def print_table(headers, rows):
     """Utility to print a beautiful, clean CLI table."""
@@ -60,7 +64,7 @@ def format_list(lst):
 # --- Task Command Handlers ---
 
 def handle_task_list(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     params = {}
     if args.status:
         params["status"] = args.status
@@ -83,7 +87,7 @@ def handle_task_list(args):
         sys.exit(1)
 
 def handle_task_get(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.get(f"/tasks/{args.id}")
         response.raise_for_status()
@@ -109,7 +113,7 @@ def handle_task_get(args):
         sys.exit(1)
 
 def handle_task_create(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     payload = {"title": args.title}
     if args.desc:
         payload["description"] = args.desc
@@ -130,7 +134,7 @@ def handle_task_create(args):
         sys.exit(1)
 
 def handle_task_update(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     payload = {}
     if args.title:
         payload["title"] = args.title
@@ -155,7 +159,7 @@ def handle_task_update(args):
         sys.exit(1)
 
 def handle_task_delete(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.delete(f"/tasks/{args.id}")
         response.raise_for_status()
@@ -165,7 +169,7 @@ def handle_task_delete(args):
         sys.exit(1)
 
 def handle_task_link(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.post(f"/tasks/{args.id}/link/{args.other_id}")
         response.raise_for_status()
@@ -177,7 +181,7 @@ def handle_task_link(args):
         sys.exit(1)
 
 def handle_task_unlink(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.post(f"/tasks/{args.id}/unlink/{args.other_id}")
         response.raise_for_status()
@@ -187,7 +191,7 @@ def handle_task_unlink(args):
         sys.exit(1)
 
 def handle_task_assign(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.post(f"/tasks/{args.id}/assign/{args.list_id}")
         response.raise_for_status()
@@ -199,7 +203,7 @@ def handle_task_assign(args):
         sys.exit(1)
 
 def handle_task_unassign(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.post(f"/tasks/{args.id}/unassign")
         response.raise_for_status()
@@ -212,7 +216,7 @@ def handle_task_unassign(args):
 # --- List Command Handlers ---
 
 def handle_list_list(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.get("/lists")
         response.raise_for_status()
@@ -227,7 +231,7 @@ def handle_list_list(args):
         sys.exit(1)
 
 def handle_list_get(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.get(f"/lists/{args.id}")
         response.raise_for_status()
@@ -251,7 +255,7 @@ def handle_list_get(args):
         sys.exit(1)
 
 def handle_list_create(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     payload = {"name": args.name}
     if args.desc:
         payload["description"] = args.desc
@@ -266,7 +270,7 @@ def handle_list_create(args):
         sys.exit(1)
 
 def handle_list_update(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     payload = {}
     if args.name:
         payload["name"] = args.name
@@ -282,7 +286,7 @@ def handle_list_update(args):
         sys.exit(1)
 
 def handle_list_delete(args):
-    client = get_client(args.url)
+    client = get_client(args.url, args.api_key)
     try:
         response = client.delete(f"/lists/{args.id}")
         response.raise_for_status()
@@ -302,6 +306,11 @@ def main():
         "--url", 
         default=DEFAULT_BASE_URL, 
         help=f"Base URL of the running FastAPI server (default: {DEFAULT_BASE_URL})"
+    )
+    parser.add_argument(
+        "--api-key", 
+        default="dev-premium-api-key-2026", 
+        help="API Key for server authentication (default: dev-premium-api-key-2026)"
     )
     
     subparsers = parser.add_subparsers(title="Commands", dest="command", required=True)

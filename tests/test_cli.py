@@ -5,6 +5,7 @@ import cli
 class DummyArgs:
     def __init__(self, **kwargs):
         self.url = "http://127.0.0.1:8000"
+        self.api_key = "dev-premium-api-key-2026"
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -22,7 +23,14 @@ def test_cli_task_list(mock_client_class):
     args = DummyArgs(status="open", list_id=2)
     cli.handle_task_list(args)
     
+    # Verify client initialization with correct headers
+    mock_client_class.assert_called_once_with(
+        base_url="http://127.0.0.1:8000",
+        headers={"X-API-Key": "dev-premium-api-key-2026"},
+        timeout=10.0
+    )
     mock_client.get.assert_called_once_with("/tasks", params={"status": "open", "list_id": 2})
+
 
 @patch("cli.httpx.Client")
 def test_cli_task_get(mock_client_class):

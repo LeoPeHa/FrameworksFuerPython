@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Security, Request
+from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 from typing import List as TypedList, Optional
 
@@ -10,11 +11,28 @@ from database import engine, get_db
 # Create all tables on startup (simple approach for SQLite)
 models.Base.metadata.create_all(bind=engine)
 
+API_KEY_NAME = "X-API-Key"
+API_KEY = "dev-premium-api-key-2026"
+api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+def get_api_key(request: Request, api_key: Optional[str] = Security(api_key_header)):
+    # Allow Swagger docs, root, and openapi schema to be accessed without API key
+    if request.url.path in ["/", "/docs", "/openapi.json"]:
+        return None
+    if not api_key or api_key != API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid or missing API Key (X-API-Key header required)."
+        )
+    return api_key
+
 app = FastAPI(
     title="Tasks & Lists CRUD Server",
     description="A high-performance premium REST API for managing tasks, lists, and their relationships.",
-    version="1.0.0"
+    version="1.0.0",
+    dependencies=[Depends(get_api_key)]
 )
+
 
 @app.get("/")
 def read_root():

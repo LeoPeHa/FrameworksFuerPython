@@ -34,8 +34,22 @@ def client_fixture(session):
             pass
     
     app.dependency_overrides[get_db] = override_get_db
-    yield TestClient(app)
+    yield TestClient(app, headers={"X-API-Key": "dev-premium-api-key-2026"})
     app.dependency_overrides.clear()
+
+def test_api_key_protection():
+    # Request without key must fail with 403 Forbidden
+    with TestClient(app) as test_client:
+        response = test_client.get("/tasks")
+        assert response.status_code == 403
+        assert "Invalid or missing API Key" in response.json()["detail"]
+        
+    # Request with incorrect key must fail with 403 Forbidden
+    with TestClient(app, headers={"X-API-Key": "wrong-key-123"}) as test_client:
+        response = test_client.get("/tasks")
+        assert response.status_code == 403
+        assert "Invalid or missing API Key" in response.json()["detail"]
+
 
 
 # --- List CRUD Tests ---

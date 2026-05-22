@@ -51,3 +51,5 @@ The following requests should be implemented:
 - 14:28: API-Key läuft, CLI auch, direktes CURl-Request bricht ab ohne API-Key. Jetzt noch eine GUI, dann QC, eventuell noch Zieldatum und Priorität implementieren. Related Tasks würde ich so lassen, da es schwierig ist, die Vielzahl von Beziehungen zwischen Tasks abschließend zu modellieren ohne Feature Creep im Rahmen dieses Projektes.
 
 - 14:47: Editor und Modellkollaps, trotz Upgrade, wechsel zu VS Code
+
+- 14:55: Ganz ehrlich? Die GUI ist hässlich wie die Nacht, aber läuft. Mal gucken ob ich da manuel was ändern kann.

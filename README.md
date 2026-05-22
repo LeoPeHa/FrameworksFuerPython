@@ -45,3 +45,5 @@ The following requests should be implemented:
     - Optional: Zusätzliche Funktionalitäten (Prio, Zieldatum, Voraussetzungen)
 
 - 14:14 CLI hat kein Error-Handling. Wäre Overkill? Korrigiere, Error-Handling ist da, aber mit HTTP-Fehlermeldungen, mit dem Ottonormalanwender nicht umbedingt umgehen kann. Feature Creep wäre aber auch zu bedenken. Abgleich mit API erfolgreich, scheint beides auf selbe Datenbank zu wirken.
+
+- 14:18 CLI zufriedenstellend getestet

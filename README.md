@@ -44,6 +44,8 @@ The following requests should be implemented:
     - Zusätzliche Code-Kontrolle im Hinblick auf Lesbarkeit und Architektur, das bisher gesehene fand ich aber recht ansehlich.
     - Optional: Zusätzliche Funktionalitäten (Prio, Zieldatum, Voraussetzungen)
 
-- 14:14 CLI hat kein Error-Handling. Wäre Overkill? Korrigiere, Error-Handling ist da, aber mit HTTP-Fehlermeldungen, mit dem Ottonormalanwender nicht umbedingt umgehen kann. Feature Creep wäre aber auch zu bedenken. Abgleich mit API erfolgreich, scheint beides auf selbe Datenbank zu wirken.
+- 14:14: CLI hat kein Error-Handling. Wäre Overkill? Korrigiere, Error-Handling ist da, aber mit HTTP-Fehlermeldungen, mit dem Ottonormalanwender nicht umbedingt umgehen kann. Feature Creep wäre aber auch zu bedenken. Abgleich mit API erfolgreich, scheint beides auf selbe Datenbank zu wirken.
 
-- 14:18 CLI zufriedenstellend getestet
+- 14:18: CLI zufriedenstellend getestet
+
+- 14:28: API-Key läuft, CLI auch, direktes CURl-Request bricht ab ohne API-Key. Jetzt noch eine GUI, dann QC, eventuell noch Zieldatum und Priorität implementieren. Related Tasks würde ich so lassen, da es schwierig ist, die Vielzahl von Beziehungen zwischen Tasks abschließend zu modellieren ohne Feature Creep im Rahmen dieses Projektes.

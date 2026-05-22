@@ -35,3 +35,5 @@ The following requests should be implemented:
 - 12:42: Ich könnte das Frontend über Web mithilfe von Jinja2 umsetzen.
 
 - 13:13: Verknüpfung und Listenzuordnungen trennbar, muss noch nachtesten.
+
+- 13:30: Nachtesten erfolgreich, Feedback des Dozenten: Keine weitere Sprache, Flutter damit raus, keine explizite Äußerung zu API-Key, mache ich also, alles andere fühlt sich komisch an, CLI oder GUI überlege ich noch, beides wäre schon nice, aber CLI ist universeller und bei der GUI muss ich überlegen, wie das auf Windows/MacOS funktioniert, gerade könnte ich nur Windows zusätzlich testen. Die Architektur und den Code finde ich soweit überschaubar, aber ich gehe da nochmal drüber, mal gucken was Antigravity so für Linter bietet.

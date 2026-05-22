@@ -22,3 +22,6 @@ The following requests should be implemented:
 - DELETE /lists/{id}
 - POST /tasks/{id}/link/{other_id}
 - POST /tasks/{id}/assign/{list_id}
+
+## Log
+- 12:03: Server läuft, reagiert auf Anfrage, werde jetzt manuell nachtesten. Weitere Ziele: API-Key, vielleicht noch eine CLI-App oder etwas mit Flutter, je nachdem wie es funktioniert. Weitere Ideen: Tasks klar als Voraussetzung, Unterscheidung in optional/verpflichtend, Anzeige von Folgetasks, Zieldatum, Priorität.

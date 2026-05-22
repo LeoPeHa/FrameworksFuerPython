@@ -228,3 +228,54 @@ def test_link_non_existent_tasks(client):
     
     response = client.post(f"/tasks/{t_id}/link/999")
     assert response.status_code == 404
+
+
+# --- Task Unlink & Unassign Tests ---
+
+def test_unlink_tasks_symmetric(client):
+    # 1. Create two tasks and link them
+    t1_resp = client.post("/tasks", json={"title": "Task A"})
+    t1_id = t1_resp.json()["id"]
+    t2_resp = client.post("/tasks", json={"title": "Task B"})
+    t2_id = t2_resp.json()["id"]
+    
+    client.post(f"/tasks/{t1_id}/link/{t2_id}")
+    
+    # Verify they are linked
+    t1_linked = client.get(f"/tasks/{t1_id}").json()
+    assert len(t1_linked["links"]) == 1
+    
+    # 2. Unlink Task A from Task B
+    unlink_resp = client.post(f"/tasks/{t1_id}/unlink/{t2_id}")
+    assert unlink_resp.status_code == 200
+    
+    # 3. Verify task A shows 0 links
+    get_t1 = client.get(f"/tasks/{t1_id}")
+    assert get_t1.status_code == 200
+    assert len(get_t1.json()["links"]) == 0
+    
+    # 4. Verify task B symmetrically shows 0 links
+    get_t2 = client.get(f"/tasks/{t2_id}")
+    assert get_t2.status_code == 200
+    assert len(get_t2.json()["links"]) == 0
+
+def test_unassign_task_from_list(client):
+    # 1. Create list and task and assign them
+    list_resp = client.post("/lists", json={"name": "Work"})
+    list_id = list_resp.json()["id"]
+    task_resp = client.post("/tasks", json={"title": "Task A", "list_id": list_id})
+    task_id = task_resp.json()["id"]
+    
+    # Verify assignment
+    task_data = client.get(f"/tasks/{task_id}").json()
+    assert task_data["list_id"] == list_id
+    
+    # 2. Unassign task from the list
+    unassign_resp = client.post(f"/tasks/{task_id}/unassign")
+    assert unassign_resp.status_code == 200
+    assert unassign_resp.json()["list_id"] is None
+    
+    # 3. Verify list no longer has the task
+    get_list = client.get(f"/lists/{list_id}")
+    assert len(get_list.json()["tasks"]) == 0
+

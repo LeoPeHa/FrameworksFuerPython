@@ -166,3 +166,26 @@ def assign_task(id: int, list_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
+
+@app.post("/tasks/{id}/unlink/{other_id}", response_model=schemas.TaskResponse)
+def unlink_tasks(id: int, other_id: int, db: Session = Depends(get_db)):
+    """Unlink two tasks. This removes the symmetric, bi-directional relationship."""
+    db_task = crud.unlink_tasks(db, task_id=id, other_id=other_id)
+    if not db_task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"One or both of tasks with IDs {id} and {other_id} could not be found."
+        )
+    return db_task
+
+@app.post("/tasks/{id}/unassign", response_model=schemas.TaskResponse)
+def unassign_task(id: int, db: Session = Depends(get_db)):
+    """Remove a task from its assigned list (setting list_id to NULL)."""
+    db_task = crud.unassign_task_from_list(db, task_id=id)
+    if not db_task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task with ID {id} not found."
+        )
+    return db_task
+

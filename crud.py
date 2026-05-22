@@ -139,3 +139,32 @@ def assign_task_to_list(db: Session, task_id: int, list_id: int):
     db.commit()
     db.refresh(task)
     return task
+
+def unlink_tasks(db: Session, task_id: int, other_id: int):
+    task = get_task(db, task_id)
+    other = get_task(db, other_id)
+    
+    if not task or not other:
+        return None
+        
+    # Remove from each other for symmetric unlinking
+    if other in task.links:
+        task.links.remove(other)
+    if task in other.links:
+        other.links.remove(task)
+        
+    db.commit()
+    db.refresh(task)
+    db.refresh(other)
+    return task
+
+def unassign_task_from_list(db: Session, task_id: int):
+    task = get_task(db, task_id)
+    if not task:
+        return None
+        
+    task.list_id = None
+    db.commit()
+    db.refresh(task)
+    return task
+

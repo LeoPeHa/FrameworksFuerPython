@@ -38,7 +38,4 @@ The following requests should be implemented:
 
 - 13:30: Nachtesten erfolgreich, Feedback des Dozenten: Keine weitere Sprache, Flutter damit raus, keine explizite Äußerung zu API-Key, mache ich also, alles andere fühlt sich komisch an, CLI oder GUI überlege ich noch, beides wäre schon nice, aber CLI ist universeller und bei der GUI muss ich überlegen, wie das auf Windows/MacOS funktioniert, gerade könnte ich nur Windows zusätzlich testen. Die Architektur und den Code finde ich soweit überschaubar, aber ich gehe da nochmal drüber, mal gucken was Antigravity so für Linter bietet.
 
-- 13:38: Wenig überraschend hat Antigravity im Vergleich mit VS Code eine deutlich geringere Pluginauswahl, die Vervollständigungsvorschläge finde ich auch unnötig lange, die LLM-Unterstützung für Boilerplate ist jedoch angenehm umfangreich und wäre überlegenswert für private Projekte. Mal testen ob hier Unterpunkte funktionierne.
-    - Punkt 1
-    - Punkt 2
-    - Punkt 3
+- 13:38: Wenig überraschend hat Antigravity im Vergleich mit VS Code eine deutlich geringere Pluginauswahl, die Vervollständigungsvorschläge finde ich auch unnötig lange, die LLM-Unterstützung für Boilerplate ist jedoch angenehm umfangreich und wäre überlegenswert für private Projekte.

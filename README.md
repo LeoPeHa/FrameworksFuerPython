@@ -25,3 +25,5 @@ The following requests should be implemented:
 
 ## Log
 - 12:03: Server läuft, reagiert auf Anfrage, werde jetzt manuell nachtesten. Weitere Ziele: API-Key, vielleicht noch eine CLI-App oder etwas mit Flutter, je nachdem wie es funktioniert. Weitere Ideen: Tasks klar als Voraussetzung, Unterscheidung in optional/verpflichtend, Anzeige von Folgetasks, Zieldatum, Priorität.
+
+- 12:29: Listen- und Taskoperationen funktionieren. Idee: minimale GUI. Eine andere hatte ich eben auch, aber schon wieder vergessen.

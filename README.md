@@ -57,3 +57,5 @@ The following requests should be implemented:
 - 14:57: AI-unterstütztes Coding hat was, aber QA ist wichtig. Und Antigravity hat definitiv noch Verbesserungsbedarf in Hinsicht auf Doku und Use-Limits.
 
 - 15:01: Also Design kann man damit vergessen. Vergabe der Farbcodes auch nicht klar deifniert, braucht jetzt zuviel Trial and Error bis ich mich damit zurechtgefunden habe. Bleibt so.
+
+- 15:20: Also, GUI schnell zu implementieren mit lokal-Modell-Option in VS Code war nichts, da kommen sich die Packages in die Quere.

@@ -15,6 +15,7 @@ API_KEY_NAME = "X-API-Key"
 API_KEY = "dev-premium-api-key-2026"
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
+
 def get_api_key(request: Request, api_key: Optional[str] = Security(api_key_header)):
     # Allow Swagger docs, root, and openapi schema to be accessed without API key
     if request.url.path in ["/", "/docs", "/openapi.json"]:
@@ -22,15 +23,16 @@ def get_api_key(request: Request, api_key: Optional[str] = Security(api_key_head
     if not api_key or api_key != API_KEY:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Invalid or missing API Key (X-API-Key header required)."
+            detail="Invalid or missing API Key (X-API-Key header required).",
         )
     return api_key
+
 
 app = FastAPI(
     title="Tasks & Lists CRUD Server",
     description="A high-performance premium REST API for managing tasks, lists, and their relationships.",
     version="1.0.0",
-    dependencies=[Depends(get_api_key)]
+    dependencies=[Depends(get_api_key)],
 )
 
 
@@ -38,19 +40,22 @@ app = FastAPI(
 def read_root():
     return {
         "message": "Welcome to the Tasks & Lists CRUD Server API.",
-        "documentation": "/docs"
+        "documentation": "/docs",
     }
 
+
 # --- Tasks Routes ---
+
 
 @app.get("/tasks", response_model=TypedList[schemas.TaskResponse])
 def get_tasks(
     status: Optional[schemas.TaskStatus] = None,
     list_id: Optional[int] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Retrieve tasks, with optional filtering by status or list_id."""
     return crud.get_tasks(db, status=status, list_id=list_id)
+
 
 @app.get("/tasks/{id}", response_model=schemas.TaskResponse)
 def get_task(id: int, db: Session = Depends(get_db)):
@@ -59,20 +64,21 @@ def get_task(id: int, db: Session = Depends(get_db)):
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with ID {id} not found."
+            detail=f"Task with ID {id} not found.",
         )
     return db_task
 
-@app.post("/tasks", response_model=schemas.TaskResponse, status_code=status.HTTP_201_CREATED)
+
+@app.post(
+    "/tasks", response_model=schemas.TaskResponse, status_code=status.HTTP_201_CREATED
+)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
     """Create a new task."""
     try:
         return crud.create_task(db, task_data=task)
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
 
 @app.put("/tasks/{id}", response_model=schemas.TaskResponse)
 def update_task(id: int, task: schemas.TaskUpdate, db: Session = Depends(get_db)):
@@ -82,14 +88,12 @@ def update_task(id: int, task: schemas.TaskUpdate, db: Session = Depends(get_db)
         if not db_task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Task with ID {id} not found."
+                detail=f"Task with ID {id} not found.",
             )
         return db_task
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
 
 @app.delete("/tasks/{id}", status_code=status.HTTP_200_OK)
 def delete_task(id: int, db: Session = Depends(get_db)):
@@ -98,17 +102,19 @@ def delete_task(id: int, db: Session = Depends(get_db)):
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with ID {id} not found."
+            detail=f"Task with ID {id} not found.",
         )
     return {"detail": f"Task {id} deleted successfully."}
 
 
 # --- Lists Routes ---
 
+
 @app.get("/lists", response_model=TypedList[schemas.ListResponse])
 def get_lists(db: Session = Depends(get_db)):
     """Retrieve all lists."""
     return crud.get_lists(db)
+
 
 @app.get("/lists/{id}", response_model=schemas.ListResponse)
 def get_list(id: int, db: Session = Depends(get_db)):
@@ -117,14 +123,18 @@ def get_list(id: int, db: Session = Depends(get_db)):
     if not db_list:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"List with ID {id} not found."
+            detail=f"List with ID {id} not found.",
         )
     return db_list
 
-@app.post("/lists", response_model=schemas.ListResponse, status_code=status.HTTP_201_CREATED)
+
+@app.post(
+    "/lists", response_model=schemas.ListResponse, status_code=status.HTTP_201_CREATED
+)
 def create_list(list_data: schemas.ListCreate, db: Session = Depends(get_db)):
     """Create a new list."""
     return crud.create_list(db, list_data=list_data)
+
 
 @app.put("/lists/{id}", response_model=schemas.ListResponse)
 def update_list(id: int, list_data: schemas.ListUpdate, db: Session = Depends(get_db)):
@@ -133,9 +143,10 @@ def update_list(id: int, list_data: schemas.ListUpdate, db: Session = Depends(ge
     if not db_list:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"List with ID {id} not found."
+            detail=f"List with ID {id} not found.",
         )
     return db_list
+
 
 @app.delete("/lists/{id}", status_code=status.HTTP_200_OK)
 def delete_list(id: int, db: Session = Depends(get_db)):
@@ -144,12 +155,13 @@ def delete_list(id: int, db: Session = Depends(get_db)):
     if not db_list:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"List with ID {id} not found."
+            detail=f"List with ID {id} not found.",
         )
     return {"detail": f"List {id} deleted successfully."}
 
 
 # --- Association & Link Routes ---
+
 
 @app.post("/tasks/{id}/link/{other_id}", response_model=schemas.TaskResponse)
 def link_tasks(id: int, other_id: int, db: Session = Depends(get_db)):
@@ -159,14 +171,12 @@ def link_tasks(id: int, other_id: int, db: Session = Depends(get_db)):
         if not db_task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"One or both of tasks with IDs {id} and {other_id} could not be found."
+                detail=f"One or both of tasks with IDs {id} and {other_id} could not be found.",
             )
         return db_task
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
 
 @app.post("/tasks/{id}/assign/{list_id}", response_model=schemas.TaskResponse)
 def assign_task(id: int, list_id: int, db: Session = Depends(get_db)):
@@ -176,14 +186,12 @@ def assign_task(id: int, list_id: int, db: Session = Depends(get_db)):
         if not db_task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Task with ID {id} not found."
+                detail=f"Task with ID {id} not found.",
             )
         return db_task
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
 
 @app.post("/tasks/{id}/unlink/{other_id}", response_model=schemas.TaskResponse)
 def unlink_tasks(id: int, other_id: int, db: Session = Depends(get_db)):
@@ -192,9 +200,10 @@ def unlink_tasks(id: int, other_id: int, db: Session = Depends(get_db)):
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"One or both of tasks with IDs {id} and {other_id} could not be found."
+            detail=f"One or both of tasks with IDs {id} and {other_id} could not be found.",
         )
     return db_task
+
 
 @app.post("/tasks/{id}/unassign", response_model=schemas.TaskResponse)
 def unassign_task(id: int, db: Session = Depends(get_db)):
@@ -203,7 +212,6 @@ def unassign_task(id: int, db: Session = Depends(get_db)):
     if not db_task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task with ID {id} not found."
+            detail=f"Task with ID {id} not found.",
         )
     return db_task
-

@@ -43,3 +43,5 @@ The following requests should be implemented:
     - API-Key
     - Zusätzliche Code-Kontrolle im Hinblick auf Lesbarkeit und Architektur, das bisher gesehene fand ich aber recht ansehlich.
     - Optional: Zusätzliche Funktionalitäten (Prio, Zieldatum, Voraussetzungen)
+
+- 14:14 CLI hat kein Error-Handling. Wäre Overkill?

@@ -33,3 +33,5 @@ The following requests should be implemented:
 - 12:38: Zwischenfazit: Das läuft echt gut, ich sollte das mal in PHP umsetzen damit es auf Wald- und Wiesenhostern läuft, muss aber wegen HTTPS gucken.
 
 - 12:42: Ich könnte das Frontend über Web mithilfe von Jinja2 umsetzen.
+
+- 13:13: Verknüpfung und Listenzuordnungen trennbar, muss noch nachtesten.
